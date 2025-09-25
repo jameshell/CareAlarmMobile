@@ -1,9 +1,10 @@
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { Stack } from 'expo-router';
 import { StatusBar } from 'expo-status-bar';
-import { MD3DarkTheme, MD3LightTheme, PaperProvider } from 'react-native-paper';
+import { PaperProvider } from 'react-native-paper';
 import 'react-native-reanimated';
 
+import { enterpriseDarkTheme, enterpriseLightTheme } from '@/constants/enterprise-theme';
 import { AuthProvider } from '@/contexts/auth-context';
 import { useColorScheme } from '@/hooks/use-color-scheme';
 
@@ -12,7 +13,7 @@ import { useColorScheme } from '@/hooks/use-color-scheme';
 export default function RootLayout() {
   const colorScheme = useColorScheme();
 
-  const paperTheme = colorScheme === 'dark' ? MD3DarkTheme : MD3LightTheme;
+  const paperTheme = colorScheme === 'dark' ? enterpriseDarkTheme : enterpriseLightTheme;
 
   return (
     <AuthProvider>

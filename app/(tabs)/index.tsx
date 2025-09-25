@@ -45,25 +45,25 @@ export default function HomeScreen() {
         </View>
 
         {/* Emergency Button */}
-        <Card style={[styles.emergencyCard, { backgroundColor: theme.colors.errorContainer }]}>
+        <Card style={[styles.emergencyCard, { backgroundColor: '#FEE2E2' }]}>
           <Card.Content style={styles.emergencyContent}>
             <MaterialDesignIcon
               name="alert-octagon"
               size={48}
-              color={theme.colors.error}
+              color="#DC2626"
             />
             <View style={styles.emergencyText}>
-              <Title style={[styles.emergencyTitle, { color: theme.colors.error }]}>
+              <Title style={[styles.emergencyTitle, { color: '#DC2626' }]}>
                 Emergencia
               </Title>
-              <Paragraph style={styles.emergencyDescription}>
+              <Paragraph style={[styles.emergencyDescription, { color: '#7F1D1D' }]}>
                 Presiona para activar alerta de emergencia
               </Paragraph>
             </View>
             <Button
               mode="contained"
               onPress={handleEmergencyAlert}
-              style={[styles.emergencyButton, { backgroundColor: theme.colors.error }]}
+              style={[styles.emergencyButton, { backgroundColor: '#DC2626' }]}
               contentStyle={styles.emergencyButtonContent}
             >
               ALERTA
@@ -225,8 +225,10 @@ const styles = StyleSheet.create({
     opacity: 0.7,
   },
   emergencyCard: {
-    elevation: 6,
-    borderRadius: 16,
+    elevation: 4,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#FECACA',
   },
   emergencyContent: {
     flexDirection: 'row',
@@ -258,8 +260,10 @@ const styles = StyleSheet.create({
   },
   statusCard: {
     flex: 1,
-    elevation: 4,
+    elevation: 2,
     borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   statusContent: {
     alignItems: 'center',
@@ -276,8 +280,10 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   actionsCard: {
-    elevation: 4,
-    borderRadius: 16,
+    elevation: 2,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   sectionTitle: {
     fontSize: 18,
@@ -298,8 +304,10 @@ const styles = StyleSheet.create({
     height: 56,
   },
   activityCard: {
-    elevation: 4,
-    borderRadius: 16,
+    elevation: 2,
+    borderRadius: 12,
+    borderWidth: 1,
+    borderColor: '#E2E8F0',
   },
   activityItem: {
     flexDirection: 'row',
