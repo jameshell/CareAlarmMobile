@@ -1,112 +1,220 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import MaterialDesignIcon from '@react-native-vector-icons/material-design-icons';
+import { router } from 'expo-router';
+import React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+  Avatar,
+  Button,
+  Card,
+  Divider,
+  List,
+  Paragraph,
+  Title,
+  useTheme,
+} from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { Collapsible } from '@/components/ui/collapsible';
-import { ExternalLink } from '@/components/external-link';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { IconSymbol } from '@/components/ui/icon-symbol';
-import { Fonts } from '@/constants/theme';
+import { useAuth } from '@/contexts/auth-context';
 
-export default function TabTwoScreen() {
+export default function SettingsScreen() {
+  const { user, logout } = useAuth();
+  const theme = useTheme();
+
+  const handleLogout = () => {
+    logout();
+    router.replace('/');
+  };
+
   return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#D0D0D0', dark: '#353636' }}
-      headerImage={
-        <IconSymbol
-          size={310}
-          color="#808080"
-          name="chevron.left.forwardslash.chevron.right"
-          style={styles.headerImage}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText
-          type="title"
-          style={{
-            fontFamily: Fonts.rounded,
-          }}>
-          Explore
-        </ThemedText>
-      </ThemedView>
-      <ThemedText>This app includes example code to help you get started.</ThemedText>
-      <Collapsible title="File-based routing">
-        <ThemedText>
-          This app has two screens:{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">app/(tabs)/explore.tsx</ThemedText>
-        </ThemedText>
-        <ThemedText>
-          The layout file in <ThemedText type="defaultSemiBold">app/(tabs)/_layout.tsx</ThemedText>{' '}
-          sets up the tab navigator.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/router/introduction">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Android, iOS, and web support">
-        <ThemedText>
-          You can open this project on Android, iOS, and the web. To open the web version, press{' '}
-          <ThemedText type="defaultSemiBold">w</ThemedText> in the terminal running this project.
-        </ThemedText>
-      </Collapsible>
-      <Collapsible title="Images">
-        <ThemedText>
-          For static images, you can use the <ThemedText type="defaultSemiBold">@2x</ThemedText> and{' '}
-          <ThemedText type="defaultSemiBold">@3x</ThemedText> suffixes to provide files for
-          different screen densities
-        </ThemedText>
-        <Image
-          source={require('@/assets/images/react-logo.png')}
-          style={{ width: 100, height: 100, alignSelf: 'center' }}
-        />
-        <ExternalLink href="https://reactnative.dev/docs/images">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Light and dark mode components">
-        <ThemedText>
-          This template has light and dark mode support. The{' '}
-          <ThemedText type="defaultSemiBold">useColorScheme()</ThemedText> hook lets you inspect
-          what the user&apos;s current color scheme is, and so you can adjust UI colors accordingly.
-        </ThemedText>
-        <ExternalLink href="https://docs.expo.dev/develop/user-interface/color-themes/">
-          <ThemedText type="link">Learn more</ThemedText>
-        </ExternalLink>
-      </Collapsible>
-      <Collapsible title="Animations">
-        <ThemedText>
-          This template includes an example of an animated component. The{' '}
-          <ThemedText type="defaultSemiBold">components/HelloWave.tsx</ThemedText> component uses
-          the powerful{' '}
-          <ThemedText type="defaultSemiBold" style={{ fontFamily: Fonts.mono }}>
-            react-native-reanimated
-          </ThemedText>{' '}
-          library to create a waving hand animation.
-        </ThemedText>
-        {Platform.select({
-          ios: (
-            <ThemedText>
-              The <ThemedText type="defaultSemiBold">components/ParallaxScrollView.tsx</ThemedText>{' '}
-              component provides a parallax effect for the header image.
-            </ThemedText>
-          ),
-        })}
-      </Collapsible>
-    </ParallaxScrollView>
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        <View style={styles.header}>
+          <Title style={styles.headerTitle}>Ajustes</Title>
+        </View>
+
+        {/* User Account Card */}
+        <Card style={styles.profileCard}>
+          <Card.Content style={styles.profileContent}>
+            <Avatar.Icon
+              size={64}
+              icon="account"
+              style={[styles.avatar, { backgroundColor: theme.colors.primary }]}
+            />
+            <View style={styles.userInfo}>
+              <Title style={styles.userName}>{user?.name || 'Usuario'}</Title>
+              <Paragraph style={styles.userEmail}>{user?.email}</Paragraph>
+            </View>
+            <MaterialDesignIcon
+              name="chevron-right"
+              size={24}
+              color={theme.colors.onSurfaceVariant}
+            />
+          </Card.Content>
+        </Card>
+
+        {/* Settings Section */}
+        <Card style={styles.settingsCard}>
+          <Card.Content>
+            <Title style={styles.sectionTitle}>Configuración</Title>
+            
+            <List.Item
+              title="Notificaciones"
+              description="Configurar alertas y notificaciones"
+              left={(props) => <List.Icon {...props} icon="bell" />}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => {}}
+            />
+            
+            <Divider />
+            
+            <List.Item
+              title="Privacidad"
+              description="Configuración de privacidad y seguridad"
+              left={(props) => <List.Icon {...props} icon="shield-account" />}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => {}}
+            />
+            
+            <Divider />
+            
+            <List.Item
+              title="Ayuda"
+              description="Centro de ayuda y soporte"
+              left={(props) => <List.Icon {...props} icon="help-circle" />}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => {}}
+            />
+            
+            <Divider />
+            
+            <List.Item
+              title="Acerca de"
+              description="Información sobre la aplicación"
+              left={(props) => <List.Icon {...props} icon="information" />}
+              right={(props) => <List.Icon {...props} icon="chevron-right" />}
+              onPress={() => {}}
+            />
+          </Card.Content>
+        </Card>
+
+        {/* Emergency Contacts Section */}
+        <Card style={styles.emergencyCard}>
+          <Card.Content>
+            <View style={styles.emergencyHeader}>
+              <MaterialDesignIcon
+                name="phone-alert"
+                size={24}
+                color={theme.colors.error}
+              />
+              <Title style={[styles.sectionTitle, { color: theme.colors.error }]}>
+                Contactos de Emergencia
+              </Title>
+            </View>
+            
+            <Paragraph style={styles.emergencyDescription}>
+              Configura contactos que serán notificados en caso de emergencia
+            </Paragraph>
+            
+            <Button
+              mode="outlined"
+              onPress={() => {}}
+              style={styles.emergencyButton}
+              icon="plus"
+            >
+              Agregar Contacto
+            </Button>
+          </Card.Content>
+        </Card>
+
+        {/* Logout Button */}
+        <Button
+          mode="contained"
+          onPress={handleLogout}
+          style={[styles.logoutButton, { backgroundColor: theme.colors.error }]}
+          contentStyle={styles.logoutButtonContent}
+          icon="logout"
+        >
+          Cerrar Sesión
+        </Button>
+      </ScrollView>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  headerImage: {
-    color: '#808080',
-    bottom: -90,
-    left: -35,
-    position: 'absolute',
+  container: {
+    flex: 1,
   },
-  titleContainer: {
+  scrollContainer: {
+    padding: 16,
+    gap: 16,
+  },
+  header: {
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  headerTitle: {
+    fontSize: 28,
+    fontWeight: 'bold',
+  },
+  profileCard: {
+    elevation: 4,
+    borderRadius: 16,
+  },
+  profileContent: {
     flexDirection: 'row',
+    alignItems: 'center',
+    padding: 20,
+    gap: 16,
+  },
+  avatar: {
+    marginBottom: 0,
+  },
+  userInfo: {
+    flex: 1,
+    alignItems: 'flex-start',
+  },
+  userName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 2,
+  },
+  userEmail: {
+    fontSize: 14,
+    opacity: 0.7,
+  },
+  settingsCard: {
+    elevation: 4,
+    borderRadius: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+  },
+  emergencyCard: {
+    elevation: 4,
+    borderRadius: 16,
+  },
+  emergencyHeader: {
+    flexDirection: 'row',
+    alignItems: 'center',
     gap: 8,
+    marginBottom: 8,
+  },
+  emergencyDescription: {
+    fontSize: 14,
+    opacity: 0.7,
+    marginBottom: 16,
+  },
+  emergencyButton: {
+    borderRadius: 8,
+  },
+  logoutButton: {
+    borderRadius: 28,
+    marginTop: 8,
+  },
+  logoutButtonContent: {
+    height: 48,
   },
 });

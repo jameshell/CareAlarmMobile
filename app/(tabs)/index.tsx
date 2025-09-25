@@ -1,98 +1,327 @@
-import { Image } from 'expo-image';
-import { Platform, StyleSheet } from 'react-native';
+import MaterialDesignIcon from '@react-native-vector-icons/material-design-icons';
+import React from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import {
+    Avatar,
+    Button,
+    Card,
+    FAB,
+    Paragraph,
+    Title,
+    useTheme,
+} from 'react-native-paper';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
-import { HelloWave } from '@/components/hello-wave';
-import ParallaxScrollView from '@/components/parallax-scroll-view';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { Link } from 'expo-router';
+import { useAuth } from '@/contexts/auth-context';
 
 export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12',
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <Link href="/modal">
-          <Link.Trigger>
-            <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-          </Link.Trigger>
-          <Link.Preview />
-          <Link.Menu>
-            <Link.MenuAction title="Action" icon="cube" onPress={() => alert('Action pressed')} />
-            <Link.MenuAction
-              title="Share"
-              icon="square.and.arrow.up"
-              onPress={() => alert('Share pressed')}
-            />
-            <Link.Menu title="More" icon="ellipsis">
-              <Link.MenuAction
-                title="Delete"
-                icon="trash"
-                destructive
-                onPress={() => alert('Delete pressed')}
-              />
-            </Link.Menu>
-          </Link.Menu>
-        </Link>
+  const { user } = useAuth();
+  const theme = useTheme();
 
-        <ThemedText>
-          {`Tap the Explore tab to learn more about what's included in this starter app.`}
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          {`When you're ready, run `}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
+  const handleEmergencyAlert = () => {
+    // TODO: Implement emergency alert functionality
+    alert('¡Alerta de emergencia activada!');
+  };
+
+  const handleQuickCheck = () => {
+    // TODO: Implement quick check functionality
+    alert('Realizando verificación rápida...');
+  };
+
+  return (
+    <SafeAreaView style={[styles.container, { backgroundColor: theme.colors.background }]}>
+      <ScrollView contentContainerStyle={styles.scrollContainer}>
+        {/* Header */}
+        <View style={styles.header}>
+          <View>
+            <Title style={styles.greeting}>¡Hola, {user?.name}!</Title>
+            <Paragraph style={styles.subtitle}>¿Cómo te sientes hoy?</Paragraph>
+          </View>
+          <Avatar.Icon
+            size={48}
+            icon="account"
+            style={{ backgroundColor: theme.colors.primary }}
+          />
+        </View>
+
+        {/* Emergency Button */}
+        <Card style={[styles.emergencyCard, { backgroundColor: theme.colors.errorContainer }]}>
+          <Card.Content style={styles.emergencyContent}>
+            <MaterialDesignIcon
+              name="alert-octagon"
+              size={48}
+              color={theme.colors.error}
+            />
+            <View style={styles.emergencyText}>
+              <Title style={[styles.emergencyTitle, { color: theme.colors.error }]}>
+                Emergencia
+              </Title>
+              <Paragraph style={styles.emergencyDescription}>
+                Presiona para activar alerta de emergencia
+              </Paragraph>
+            </View>
+            <Button
+              mode="contained"
+              onPress={handleEmergencyAlert}
+              style={[styles.emergencyButton, { backgroundColor: theme.colors.error }]}
+              contentStyle={styles.emergencyButtonContent}
+            >
+              ALERTA
+            </Button>
+          </Card.Content>
+        </Card>
+
+        {/* Status Cards */}
+        <View style={styles.statusGrid}>
+          <Card style={styles.statusCard}>
+            <Card.Content style={styles.statusContent}>
+              <MaterialDesignIcon
+                name="heart-pulse"
+                size={32}
+                color={theme.colors.primary}
+              />
+              <Title style={styles.statusTitle}>Estado</Title>
+              <Paragraph style={styles.statusValue}>Bien</Paragraph>
+            </Card.Content>
+          </Card>
+
+          <Card style={styles.statusCard}>
+            <Card.Content style={styles.statusContent}>
+              <MaterialDesignIcon
+                name="clock-outline"
+                size={32}
+                color={theme.colors.primary}
+              />
+              <Title style={styles.statusTitle}>Última revisión</Title>
+              <Paragraph style={styles.statusValue}>2h ago</Paragraph>
+            </Card.Content>
+          </Card>
+        </View>
+
+        {/* Quick Actions */}
+        <Card style={styles.actionsCard}>
+          <Card.Content>
+            <Title style={styles.sectionTitle}>Acciones Rápidas</Title>
+            
+            <View style={styles.actionsGrid}>
+              <Button
+                mode="outlined"
+                onPress={handleQuickCheck}
+                style={styles.actionButton}
+                contentStyle={styles.actionButtonContent}
+                icon="clipboard-check"
+              >
+                Chequeo Rápido
+              </Button>
+              
+              <Button
+                mode="outlined"
+                onPress={() => alert('Configurando medicamentos...')}
+                style={styles.actionButton}
+                contentStyle={styles.actionButtonContent}
+                icon="pill"
+              >
+                Medicamentos
+              </Button>
+              
+              <Button
+                mode="outlined"
+                onPress={() => alert('Viendo historial...')}
+                style={styles.actionButton}
+                contentStyle={styles.actionButtonContent}
+                icon="history"
+              >
+                Historial
+              </Button>
+              
+              <Button
+                mode="outlined"
+                onPress={() => alert('Configurando contactos...')}
+                style={styles.actionButton}
+                contentStyle={styles.actionButtonContent}
+                icon="contacts"
+              >
+                Contactos
+              </Button>
+            </View>
+          </Card.Content>
+        </Card>
+
+        {/* Recent Activity */}
+        <Card style={styles.activityCard}>
+          <Card.Content>
+            <Title style={styles.sectionTitle}>Actividad Reciente</Title>
+            
+            <View style={styles.activityItem}>
+              <MaterialDesignIcon
+                name="check-circle"
+                size={24}
+                color={theme.colors.primary}
+              />
+              <View style={styles.activityText}>
+                <Paragraph style={styles.activityTitle}>Chequeo completado</Paragraph>
+                <Paragraph style={styles.activityTime}>Hace 2 horas</Paragraph>
+              </View>
+            </View>
+            
+            <View style={styles.activityItem}>
+              <MaterialDesignIcon
+                name="pill"
+                size={24}
+                color={theme.colors.secondary}
+              />
+              <View style={styles.activityText}>
+                <Paragraph style={styles.activityTitle}>Medicamento tomado</Paragraph>
+                <Paragraph style={styles.activityTime}>Hace 4 horas</Paragraph>
+              </View>
+            </View>
+            
+            <View style={styles.activityItem}>
+              <MaterialDesignIcon
+                name="account-plus"
+                size={24}
+                color={theme.colors.tertiary}
+              />
+              <View style={styles.activityText}>
+                <Paragraph style={styles.activityTitle}>Contacto agregado</Paragraph>
+                <Paragraph style={styles.activityTime}>Ayer</Paragraph>
+              </View>
+            </View>
+          </Card.Content>
+        </Card>
+      </ScrollView>
+
+      {/* Floating Action Button */}
+      <FAB
+        icon="plus"
+        style={[styles.fab, { backgroundColor: theme.colors.primary }]}
+        onPress={() => alert('Agregando nueva entrada...')}
+      />
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
+  container: {
+    flex: 1,
   },
-  stepContainer: {
-    gap: 8,
+  scrollContainer: {
+    padding: 16,
+    gap: 16,
+    paddingBottom: 80, // Space for FAB
+  },
+  header: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 8,
   },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
+  greeting: {
+    fontSize: 24,
+    fontWeight: 'bold',
+  },
+  subtitle: {
+    fontSize: 16,
+    opacity: 0.7,
+  },
+  emergencyCard: {
+    elevation: 6,
+    borderRadius: 16,
+  },
+  emergencyContent: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    padding: 16,
+    gap: 16,
+  },
+  emergencyText: {
+    flex: 1,
+  },
+  emergencyTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  emergencyDescription: {
+    fontSize: 14,
+    opacity: 0.8,
+  },
+  emergencyButton: {
+    borderRadius: 24,
+  },
+  emergencyButtonContent: {
+    height: 48,
+    paddingHorizontal: 16,
+  },
+  statusGrid: {
+    flexDirection: 'row',
+    gap: 12,
+  },
+  statusCard: {
+    flex: 1,
+    elevation: 4,
+    borderRadius: 12,
+  },
+  statusContent: {
+    alignItems: 'center',
+    padding: 16,
+    gap: 8,
+  },
+  statusTitle: {
+    fontSize: 14,
+    textAlign: 'center',
+  },
+  statusValue: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    textAlign: 'center',
+  },
+  actionsCard: {
+    elevation: 4,
+    borderRadius: 16,
+  },
+  sectionTitle: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 16,
+  },
+  actionsGrid: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 12,
+  },
+  actionButton: {
+    flex: 1,
+    minWidth: '45%',
+    borderRadius: 12,
+  },
+  actionButtonContent: {
+    height: 56,
+  },
+  activityCard: {
+    elevation: 4,
+    borderRadius: 16,
+  },
+  activityItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 16,
+    paddingVertical: 8,
+  },
+  activityText: {
+    flex: 1,
+  },
+  activityTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  activityTime: {
+    fontSize: 12,
+    opacity: 0.7,
+  },
+  fab: {
     position: 'absolute',
+    margin: 16,
+    right: 0,
+    bottom: 0,
   },
 });
